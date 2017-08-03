@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>chat</title>
+    <style>
+      .chat_log{ width: 95%; height: 200px; }
+      .name{ width: 10%; }
+      .message{ width: 70%; }
+      .chat{ width: 10%; }
+    </style>
+  </head>
+  <body>
+    <ul>
+      <li id="room_id"><%= info[0].room_id%></li>
+      <li><%= info[0].room_user_count%></li>
+      <li><%= info[1].userid%> <%= info[1].job%></li>
+      <li id="User_isAlive1"></li>
+      <li><%= info[2].userid%> <%= info[2].job%></li>
+      <li id="User_isAlive2"></li>
+      <li><%= info[3].userid%> <%= info[3].job%></li>
+      <li id="User_isAlive3"></li>
+      <li><%= info[4].userid%> <%= info[4].job%></li>
+      <li id="User_isAlive4"></li>
+      <li><%= info[5].userid%> <%= info[5].job%></li>
+      <li id="User_isAlive5"></li>
+      <li>본인 닉네임 : <%= nowUser%></li>
+      <li id="timer"></li>
+    </ul>
+    <div>
+      <textarea id="chatLog" class="chat_log" readonly></textarea>
+    </div>
+    <form id="chat">
+      <input id="name" class="name" type="text" value="<%= nowUser%>" readonly>
+      <input id="message" class="message" type="text">
+      <input type="submit" class="chat" value="chat"/>
+    </form>
+    <div>
+      <input id="alive_ok_vote" type="button" class="chat" value="살리기"/>
+      <input id="kill_ok_vote" type="button" class="chat" value="죽이기"/>
+    </div>
+      <div>
+          <% for(var i=1; i<= info[0].room_user_count ; i++){%>
+            <p>
+              <input id="KILLname<%=i%>" class="name" type="text"  value="<%= info[i].userid%>"readonly>
+              <input id="KILL<%=i%>" type="button" class="chat" value="죽이기"/>
+            </p>
+          <% } %>
+      </div>
+      <div>
+      	<form method="post" action="/process/ch_point">
+      	  <input id="v_point_id"type="hidden" name="v_point" value="0">
+      		<input id="endGame_submit" type="submit" value="전송" >
+      	</form>
+      </div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+      var socket = io();
+      // var time;
+      var j_received_roomInfo = [];
+      var ho;
+      var max_vote_user;
+      $(function(){
+        $('#endGame_submit').hide();
+        startDay();
+      });
+      $('#chat').on('submit', function(e){
+
+        var ho = socket.emit('send message', $('#name').val(), $('#message').val(), $('#room_id').text());
+        console.log(ho);
+        $('#message').val("");
+        $("#message").focus();
+        e.preventDefault();
+      });
+      socket.on('receive message', function(msg, ri){
+        if(ri == $('#room_id').text()){
+          console.log(msg);
+          $('#chatLog').append(msg + ri+"\n");
+          $('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+        }
+
+      });
+
+      socket.on('receive message_toOne', function(msg, your_name ,ri){
+        if(ri == $('#room_id').text()){
+          if(your_name == $('#name').val()){
+            console.log(msg);
+            $('#chatLog').append(msg + ri+"\n");
+            $('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
+            for(var i=1; i<=5;i++){
+              $('#KILL'+i).hide();
+            }
+            // $('#KILL1').hide();
+            // $('#KILL2').hide();
+            // $('#KILL3').hide();
+            // $('#KILL4').hide();
+            // $('#KILL5').hide();
+          }
+        }
+      });
+
+      socket.on('room'+$('#room_id').text()+'startDay', function(received_roomInfo){
+        console.log('received_roomInfo : ', received_roomInfo);
+        setj_received_roomInfo(received_roomInfo);
+        for(var i=1;i<=5;i++){
+          $('#User_isAlive'+i).text(j_received_roomInfo[i].isAlive);
+        }
+        $('#alive_ok_vote').hide();
+        $('#kill_ok_vote').hide();
+        console.log('j_received_roomInfo : ' + j_received_roomInfo);
+        // time = 10;
+        // $('#timer').text(time);
+        for(var i=1; i<=5;i++){
+          if(j_received_roomInfo[i].isAlive == 'yes'){
+            $('#KILL'+i).show();
+            $('#KILL'+i).val("투표하기");
+          }else{
+            $('#KILL'+i).hide();
+          }
+
+        }
+        for(var i=1;i<=5;i++){
+          if(j_received_roomInfo[i].userid == $('#name').val()){
+            if(j_received_roomInfo[i].isAlive == 'no'){
+              for(var y=1; y<=5;y++){
+                $('#KILL'+y).hide();
+              }
+            }
+          }
+        }
+        Day();
+
+      });
+
+      socket.on('end_game', function(received_roomInfo, winner){
+        setj_received_roomInfo(received_roomInfo);
+        console.log('게임 종료');
+        for(var y=1; y<=5;y++){
+          $('#KILL'+y).hide();
+        }
+        $('#alive_ok_vote').hide();
+        $('#kill_ok_vote').hide();
+        for(var i=1;i<=5;i++){
+          if(received_roomInfo[i].userid == $('#name').val()){
+            if(received_roomInfo[i].job == 01){
+              if(winner == 0){
+                $('#v_point_id').val("5");
+              }else{
+                $('#v_point_id').val("10");
+              }
+            }else{
+              if(winner == 0){
+                $('#v_point_id').val("10");
+              }else{
+                $('#v_point_id').val("5");
+              }
+            }
+          }
+        }
+        $('#endGame_submit').show();
+      });
+
+      socket.on('set_room_info', function(received_roomInfo){
+        setj_received_roomInfo(received_roomInfo);
+        for(var i=1;i<=5;i++){
+          $('#User_isAlive'+i).text(j_received_roomInfo[i].isAlive);
+        }
+      });
+      var night_receive_roominfo = 'room' + $('#room_id').text() + 'startNight';
+      socket.on(night_receive_roominfo, function(received_roomInfo){
+        $('#alive_ok_vote').hide();
+        $('#kill_ok_vote').hide();
+        setj_received_roomInfo(received_roomInfo);
+        // time = 10;
+        // var timeer2 = setInterval(function(){
+        //   time--;
+        //   if(time == 0){
+        //     clearInterval(timeer2);
+        //     socket.emit('startDay', $('#room_id').text());
+        //   }
+        //   $('#timer').text(time);
+        // }, 1000);
+        for(var i=1; i<=received_roomInfo[0].room_user_count;i++){
+          if(received_roomInfo[i].userid == $('#name').val()){
+            if(received_roomInfo[i].isAlive == 'yes'){
+              for(var j=1; j<=5;j++){
+                $('#KILL'+j).show();
+              }
+              switch (received_roomInfo[i].job) {
+                case 01:
+                  //마피아
+                  for(var i=1; i<=5; i++){
+                    var __id = '#KILL' + i;
+                    if(j_received_roomInfo[i].isAlive == 'no'){
+                      $(__id).hide();
+                    }
+                  }
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).val("마피아_죽이기");
+                  }
+                  // $('#KILL1').val("마피아_죽이기");
+                  // $('#KILL2').val("마피아_죽이기");
+                  break;
+                case 02:
+                  //의사
+                  for(var i=1; i<=5; i++){
+                    var __id = '#KILL' + i;
+                    if(j_received_roomInfo[i].isAlive == 'yes'){
+                      $(__id).hide();
+                    }
+                  }
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).val("의사_살리기");
+                  }
+                  //
+                  // $('#KILL1').val("의사_살리기");
+                  // $('#KILL2').val("의사_살리기");
+                  break;
+                case 03:
+                  //경찰
+                  for(var i=1; i<=5; i++){
+                    var __id = '#KILL' + i;
+                    if(j_received_roomInfo[i].isAlive == 'no'){
+                      $(__id).hide();
+                    }
+                  }
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).val("경찰_채크하기");
+                  }
+                  // $('#KILL1').val("경찰_채크하기");
+                  // $('#KILL2').val("경찰_채크하기");
+                  break;
+                case 04:
+                  //시민
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).hide();
+                  }
+                  // $('#KILL1').hide();
+                  // $('#KILL2').hide();
+                  break;
+                case 11:
+                  //조폭
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).hide();
+                  }
+                  // $('#KILL1').hide();
+                  // $('#KILL2').hide();
+                  break;
+                case 12:
+                  //스파이
+                  //채크 성공시 job code 01 로 변경
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).val("스파이_채크하기");
+                  }
+                  // $('#KILL1').val("스파이_채크하기");
+                  // $('#KILL2').val("스파이_채크하기");
+                  break;
+                case 13:
+                  //기자
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).val("기자_선택하기");
+                  }
+                  // $('#KILL1').val("기자_선택하기");
+                  // $('#KILL2').val("기자_선택하기");
+                  break;
+                case 14:
+                  //무당
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).val("무당_선택하기");
+                  }
+                  // $('#KILL1').val("무당_선택하기");
+                  // $('#KILL2').val("무당_선택하기");
+                  break;
+                case 15:
+                  //군인
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).hide();
+                  }
+                  // $('#KILL1').hide();
+                  // $('#KILL2').hide();
+                  break;
+                case 16:
+                  //정치가
+                  //어려워...
+                  break;
+                case 17:
+                  //테러리스트
+                  //어려워...
+                  break;
+                default:
+                  //error or 00 undefined
+                  for(var k=1;k<=5;k++){
+                    $('#KILL'+k).hide();
+                  }
+                  // $('#KILL1').attr('disable', false);
+                  // $('#KILL2').attr('disable', false);
+                  break;
+              }
+            }
+          }
+        }
+      });
+
+      socket.on('endDay', function(received_max_vote_user,received_room_id){
+
+        if(j_received_roomInfo[received_max_vote_user].userid == $('#name').val()){
+          $('#alive_ok_vote').hide();
+          $('#kill_ok_vote').hide();
+        }else {
+          for(var i=1;i<=5;i++){
+            if(j_received_roomInfo[i].userid==$('#name').val()){
+              if(j_received_roomInfo[i].isAlive == 'yes'){
+                $('#alive_ok_vote').show();
+                $('#kill_ok_vote').show();
+              }else{
+                $('#alive_ok_vote').hide();
+                $('#kill_ok_vote').hide();
+              }
+            }
+          }
+
+        }
+        for(var k=1;k<=5;k++){
+          $('#KILL'+k).hide();
+        }
+        max_vote_user = received_max_vote_user;
+      });
+
+      $('#alive_ok_vote').click(function(){
+        console.log('살리기 눌름');
+        $('#alive_ok_vote').hide();
+        $('#kill_ok_vote').hide();
+        socket.emit('alive_ok_vote',max_vote_user,$('#room_id').text());
+      });
+      $('#kill_ok_vote').click(function(){
+        console.log('죽이기 눌름');
+        $('#alive_ok_vote').hide();
+        $('#kill_ok_vote').hide();
+        socket.emit('kill_ok_vote',max_vote_user,$('#room_id').text());
+      });
+
+
+
+      $('#KILL1').click(function(e){
+        console.log('눌림 : 1번 버튼');
+        buttonCLicked(1);
+      });
+      $('#KILL2').click(function(e){
+        console.log('눌림 : 2번 버튼');
+        buttonCLicked(2);
+      });
+      $('#KILL3').click(function(e){
+        console.log('눌림 : 3번 버튼');
+        buttonCLicked(3);
+      });
+      $('#KILL4').click(function(e){
+        console.log('눌림 : 4번 버튼');
+        buttonCLicked(4);
+      });
+      $('#KILL5').click(function(e){
+        console.log('눌림 : 5번 버튼');
+        buttonCLicked(5);
+      });
+      function buttonCLicked(x){
+          console.log('누우우울림', x);
+          var value = $('#KILL'+x).val();
+          console.log(value);
+          if(value == '마피아_죽이기'){
+            console.log(x);
+            socket.emit('mapia_action',x,j_received_roomInfo[0].room_id);
+          }else if(value == '의사_살리기'){
+            socket.emit('doctor_action',x,j_received_roomInfo[0].room_id);
+          }else if(value == '경찰_채크하기'){
+            socket.emit('police_action',x, $('#name').val(),j_received_roomInfo[0].room_id);
+          }else if(value == '투표하기'){
+            for(var k=1;k<=5;k++){
+              $('#KILL'+k).hide();
+            }
+            socket.emit('day_vote_action',x,j_received_roomInfo[0].room_id);
+          }
+          e.preventDefault();
+      }
+        //
+        // $('#KILL'+x).click(function(e){
+        //   console.log('누우우울림', x);
+        //   var value = $('#KILL'+x).val();
+        //   console.log(value);
+        //   if(value == '마피아_죽이기'){
+        //     console.log(x);
+        //     socket.emit('mapia_action',x,j_received_roomInfo[0].room_id);
+        //   }else if(value == '의사_살리기'){
+        //     socket.emit('doctor_action',x,j_received_roomInfo[0].room_id);
+        //   }else if(value == '경찰_채크하기'){
+        //     socket.emit('police_action',x, $('#name').val(),j_received_roomInfo[0].room_id);
+        //   }else if(value == '스파이_채크하기'){
+        //     socket.emit('spy_action',x,$('#name').val(),j_received_roomInfo[0].room_id);
+        //   }else if(value == '기자_선택하기'){
+        //     socket.emit('reporter_action',x,j_received_roomInfo[0].room_id);
+        //   }else if(value == '무당_선택하기'){
+        //     socket.emit('shaman_action',x,j_received_roomInfo[0].room_id);
+        //   }
+        //   e.preventDefault();
+        // });
+
+      //
+      // $('#KILL1').click(function(e){
+      //   console.log('누우우울림');
+      //   var value1 = $('#KILL1').val();
+      //   if(value1 == '마피아_죽이기'){
+      //     socket.emit('mapia_action',1,j_received_roomInfo[0].room_id);
+      //   }else if(value1 == '의사_살리기'){
+      //     socket.emit('doctor_action',1,j_received_roomInfo[0].room_id);
+      //   }else if(value1 == '경찰_채크하기'){
+      //     socket.emit('police_action',1, $('#name').val(),j_received_roomInfo[0].room_id);
+      //   }else if(value1 == '스파이_채크하기'){
+      //     socket.emit('spy_action',1,$('#name').val(),j_received_roomInfo[0].room_id);
+      //   }else if(value1 == '기자_선택하기'){
+      //     socket.emit('reporter_action',1,j_received_roomInfo[0].room_id);
+      //   }else if(value1 == '무당_선택하기'){
+      //     socket.emit('shaman_action',1,j_received_roomInfo[0].room_id);
+      //   }
+      //   e.preventDefault();
+      // });
+      //
+      // $('#KILL2').click(function(e){
+      //   console.log('누우우울림');
+      //   var value2 = $('#KILL1').val();
+      //   if(value2 == '마피아_죽이기'){
+      //     socket.emit('mapia_action',2,j_received_roomInfo[0].room_id);
+      //   }else if(value2 == '의사_살리기'){
+      //     socket.emit('doctor_action',2,j_received_roomInfo[0].room_id);
+      //   }else if(value2 == '경찰_채크하기'){
+      //     socket.emit('police_action',2, $('#name').val() ,j_received_roomInfo[0].room_id);
+      //   }else if(value2 == '스파이_채크하기'){
+      //     socket.emit('spy_action',2,$('#name').val(),j_received_roomInfo[0].room_id);
+      //   }else if(value2 == '기자_선택하기'){
+      //     socket.emit('reporter_action',2,j_received_roomInfo[0].room_id);
+      //   }else if(value2 == '무당_선택하기'){
+      //     socket.emit('shaman_action',2,j_received_roomInfo[0].room_id);
+      //   }
+      //   e.preventDefault();
+      // });
+      socket.on('timeChange',function(received_room_id, time, received_user_name){
+        if(received_user_name == $('#name').val()){
+          $('#timer').text(time);
+        }
+      });
+      var received_mapia_action = 'mapia_action' + $('#room_id').text();
+      socket.on(received_mapia_action, function(received_roomInfo){
+        setj_received_roomInfo(received_roomInfo);
+        for(var k=1;k<=5;k++){
+          $('#KILL'+k).hide();
+        }
+        // $('#KILL1').hide();
+        // $('#KILL2').hide();
+      });
+
+      socket.on('doctor_action'+$('#room_id').text(), function(received_roomInfo){
+        setj_received_roomInfo(received_roomInfo);
+        for(var k=1;k<=5;k++){
+          $('#KILL'+k).hide();
+        }
+        // $('#KILL1').hide();
+        // $('#KILL2').hide();
+      });
+      // socket.on('spy_action'+$('#room_id').text(), function(received_roomInfo){
+      //   setj_received_roomInfo(received_roomInfo);
+      // });
+      // socket.on('reporter_action'+$('#room_id').text(), function(received_roomInfo){
+      //   setj_received_roomInfo(received_roomInfo);
+      // });
+      // socket.on('shaman_action'+$('#room_id').text(), function(received_roomInfo){
+      //   setj_received_roomInfo(received_roomInfo);
+      // });
+
+
+      function startDay(){
+          socket.emit('startDay',$('#room_id').text(),$('#name').val());
+      }
+
+      function Day(){
+        // var timeer = setInterval(function(){
+        //   time--;
+        //   if(time == 0){
+        //     clearInterval(timeer);
+        //     socket.emit('startNight', $('#room_id').text());
+        //   }
+        //   $('#timer').text(time);
+        // }, 1000);
+      }
+
+      function setj_received_roomInfo(received_roomInfo){
+        for(var i=0;i<=5;i++){
+          j_received_roomInfo[i] = received_roomInfo[i];
+        }
+        console.log('setj_received_roomInfo : ' , j_received_roomInfo);
+      }
+    </script>
+  </body>
+</html>
