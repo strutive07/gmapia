@@ -1,9 +1,9 @@
 var path = require('path');
 var login_html = function(req, res){
-  // if(req.session.userId&&req.session.userName){
-  //   res.redirect('/game');
-  //   return;
-  // }
+  if(req.session.userId&&req.session.userName){
+    res.redirect('/game');
+    return;
+  }
   console.log('/login 호출');
   req.app.render(path.join(process.cwd(),'views/login'), function(err, html){
     if(err){
@@ -16,10 +16,10 @@ var login_html = function(req, res){
 };
 
 var register_html = function(req, res){
-  // if(req.session.userId&&req.session.userName){
-  //   res.redirect('/game');
-  //   return;
-  // }
+  if(req.session.userId&&req.session.userName){
+    res.redirect('/game');
+    return;
+  }
   console.log('/register_html 호출');
   req.app.render(path.join(process.cwd(),'views/register'), function(err, html){
     if(err){
@@ -29,6 +29,52 @@ var register_html = function(req, res){
     console.log('rendered : register.ejs');
     res.end(html);
   });
+};
+
+var user_page = function(req, res){
+  var param_userid = req.params.param_userid;
+  console.log(param_userid);
+  var database = req.app.get('database');
+
+  if(param_userid){
+    user_pagef(database, param_userid, function(err, results){
+      if(err){
+        console.log(err);
+        return;
+      }
+      if(results){
+        database.IconModel.findAll(function(err, icons){
+          if(err){
+            console.log('icon : ',err);
+            return;
+          }
+          if (icons) {
+            var curUserIcon;
+            console.log(icons);
+            console.log('user_info : ', results[0].icon);
+
+            for(var i=0;i<icons.length;i++){
+              if(icons[i].id == results[0].curIcon){
+                curUserIcon = icons[i];
+              }
+            }
+            var context = {user_info : results, icon_info : icons, curUserIcon : curUserIcon};
+            req.app.render(path.join(process.cwd(),'views/user_page'), context, function(err, html){
+              if(err){
+                console.log(err);
+                return;
+              }
+              console.log('rendered : user_page.ejs');
+              res.end(html);
+            });
+          }
+        });
+      }
+    });
+  }else{
+    console.log('비 정상적인 접근');
+    res.redirect('/game');
+  }
 };
 
 
@@ -106,11 +152,46 @@ var change_point = function(req, res){
 
 
 };
+
+var icon_register_process = function(req, res){
+  var database = req.app.get('database');
+  var param_icon_id = req.body.id;
+  var param_icon_name = req.body.name;
+  var param_icon_src = req.body.src;
+  var param_icon_point = req.body.point;
+
+  if((((param_icon_id&&param_icon_name)&&param_icon_src)&&param_icon_point)){
+    register_icon(database,param_icon_id, param_icon_name, param_icon_src, param_icon_point, function(err, addedIcon){
+      if(err){
+        console.log(err);
+        return;
+      }
+      if(addedIcon){
+        console.log(addedIcon);
+        res.redirect('/temp/icon/register');
+        database.IconModel.findAll(function(err, results){
+          console.log('re :s ',results);
+        });
+      }
+    });
+  }
+};
+var icon_register_html = function(req, res){
+  req.app.render(path.join(process.cwd(),'views/TEMP/icon_register'), function(err, html){
+    if(err){
+      console.log(err);
+      return;
+    }
+    console.log('rendered : icon_register.ejs');
+    res.end(html);
+  });
+
+};
 //=======================================================================================//
 var addUser = function(database, id, password, name, callback){
   console.log('authUser 호출됨');
 
-  var user = new database.UserModel({"name":name,"id":id,"password":password, "point":0, "win": 0});
+  var user = new database.UserModel({"name":name,"id":id,"password":password, "point":0, "win": 0, "lose": 0, "curIcon" : 0,"icon" : [0]});
 
   user.save(function(err,addedUser){
     if(err){
@@ -154,6 +235,11 @@ var point_action = function(database,id,received_point,callback){
     }
     if(received_point == 10){
       results[0].win = Number(results[0].win) + 1;
+    }else if(received_point == 5){
+      results[0].losw = Number(results[0].lose) + 1;
+    }else{
+      callback(err, null);
+      return;
     }
     results[0].point = Number(results[0].point) + Number(received_point);
     if(results.length>0){
@@ -168,7 +254,28 @@ var point_action = function(database,id,received_point,callback){
   });
 };
 
-
+var user_pagef = function(database, id, callback){
+  database.UserModel.findById(id, function(err, results){
+    if(err){
+      callback(err, null);
+      return;
+    }
+    if(results.length>0){
+      callback(null, results);
+    }
+  });
+};
+var register_icon = function(database, id, name, src, point, callback){
+  var new_icon = new database.IconModel({"id" : id, "name" : name, "src" : src, "point" : point});
+  new_icon.save(function(err,addedIcon){
+    if(err){
+      callback(err, null);
+      return;
+    }
+    console.log("Icon 추가 [id : %s, name : %s, src : %s]", id, name, src);
+    callback(null, addedIcon);
+  });
+};
 
 
 module.exports.login_html = login_html;
@@ -176,3 +283,6 @@ module.exports.register_html = register_html;
 module.exports.login = login;
 module.exports.register = register;
 module.exports.change_point = change_point;
+module.exports.user_page = user_page;
+module.exports.icon_register_html = icon_register_html;
+module.exports.icon_register_process = icon_register_process;

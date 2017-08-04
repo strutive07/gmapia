@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<title>Mafia Web-Room</title>
+	<link rel="stylesheet" href="play_room.css"/>
+</head>
+<body>
+	<div class="container">
+		<div class="header">
+		   <p>겜방 </p>
+		</div>
+		<div class="chatting">
+			<fieldset style="height:80%">
+				<textarea id="messageWindow" style="resize: none; width: 100%; height: 90%"  cols="50" readonly="true"></textarea>
+				<input id="name" class="name" type="text" value="<%= nowUser%>" readonly>
+				<input id="message" class="message" type="text">
+				<input type="submit" class="chat" value="chat"/>
+			</fieldset>
+			<br/><br/>
+			<table class="table"><tbody><tr><td>당신은</td><td class="even">---</td><td>입니다.</td></tr></tbody></table>
+		</div>
+		<div class="sidebar">
+			<div class="member">
+				<table class="table">
+					<tbody>
+						<tr>
+							<td class="even">생존자</td>
+						</tr>
+						<tr>
+							<td>
+								<li id="room_id"><%= info[0].room_id%></li>
+					      <li><%= info[0].room_user_count%></li>
+					      <li><%= info[1].userid%> <%= info[1].job%></li>
+					      <li id="User_isAlive1"></li>
+					      <li><%= info[2].userid%> <%= info[2].job%></li>
+					      <li id="User_isAlive2"></li>
+					      <li><%= info[3].userid%> <%= info[3].job%></li>
+					      <li id="User_isAlive3"></li>
+					      <li><%= info[4].userid%> <%= info[4].job%></li>
+					      <li id="User_isAlive4"></li>
+					      <li><%= info[5].userid%> <%= info[5].job%></li>
+					      <li id="User_isAlive5"></li>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="member">
+				<table class="table">
+					<tbody>
+						<tr>
+							<td class="even">사망자</td>
+						</tr>
+						<tr>
+							<td>
+								<li>dfadsfa</li>
+								<li>dafefaewef</li>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+
+			</div>
+			<a href="matching.html" class="button2" style=" padding: 20px 100px;">Quit</a>
+		</div>
+	</div>
+</body>
+
+<script type="text/javascript">
+	var textarea = document.getElementById("messageWindow");
+	var webSocket = new WebSocket('ws://localhost:8080/WebSocketEx/broadcasting');
+	var inputMessage = document.getElementById('inputMessage');
+	webSocket.onerror = function(event) {
+		onError(event)
+	};
+	webSocket.onopen = function(event) {
+		onOpen(event)
+	};
+	webSocket.onmessage = function(event) {
+		onMessage(event)
+	};
+	function onMessage(event) {
+		textarea.value += "상대 : " + event.data + "\n";
+	}
+	function onOpen(event) {
+		textarea.value += "연결 성공\n";
+	}
+	function onError(event) {
+		alert(event.data);
+	}
+	function enterkey() {
+		if (window.event.keyCode == 13) {
+			send();
+		}
+	}
+	function send() {
+		textarea.value += "나 : " + inputMessage.value + "\n";
+		webSocket.send(inputMessage.value);
+		inputMessage.value = "";
+	}
+</script>
+
+</html>

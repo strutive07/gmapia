@@ -82,7 +82,7 @@
 
 
 
-	<a href="#layer2" class="btn-example" ><div class="btn" ><img src="/img/chat_messages.png"></div>	</a>
+	<a id="hohohoho" href="#layer2" class="btn-example" ><div class="btn" ><img src="/img/chat_messages.png"></div>	</a>
 	<div class="dim-layer">
 		<div class="dimBg"></div>
 		<div id="layer2" class="pop-layer">
@@ -93,16 +93,20 @@
 						채팅창
 					</p>
 					<fieldset>
-						<textarea id="messageWindow" rows="10" cols="50" readonly="true" class="message-window"></textarea>
+						<textarea id="chatLog" rows="10" cols="50" readonly="true" class="message-window"></textarea>
 						<br/>
-						<input id="inputMessage" type="text" onkeyup="enterkey()"/>
-						<a href="#" id="SENDDDD" onclick="send()" class="btn-send">SEND</a>
-					</fieldset>
-					<script>
-						var textarea = document.getElementById("messageWindow");
-						// var webSocket = new WebSocket('ws://localhost:8080/WebSocketEx/broadcasting');
-						var inputMessage = document.getElementById('inputMessage');
+						<form id="chat">
+							<input id="message" class="message" type="text">
+				      <input type="submit" class="btn-send" value="chat"/>
+						</form>
 
+						<!-- <input id="inputMessage" type="text" onkeyup="enterkey()"/>
+						<a href="#" onclick="send()" class="btn-send">SEND</a> -->
+					</fieldset>
+					<script type="text/javascript">
+						var textarea = document.getElementById("chatLog");
+						// var webSocket = new WebSocket('ws://localhost:8080/WebSocketEx/broadcasting');
+						var inputMessage = document.getElementById('message');
 						// webSocket.onerror = function(event) {
 						// 	onError(event)
 						// };
@@ -121,7 +125,18 @@
 						// function onError(event) {
 						// 	alert(event.data);
 						// }
-
+						// function enterkey() {
+						// 	if (window.event.keyCode == 13) {
+						// 		send();
+						// 	}
+						// }
+						//
+						// function send() {
+						// 	textarea.value += "나 : " + inputMessage.value + "\n";
+						// 	webSocket.send(inputMessage.value);
+						// 	inputMessage.value = "";
+						// 	document.body.scrollTop = document.body.scrollHeight;
+						// }
 					</script>
 
 					<div class="btn-r">
@@ -137,7 +152,7 @@
 <script>
 var userid;
 var username;
-var socket;
+
 $(function() {
 	connectToServer();
 });
@@ -165,38 +180,34 @@ function connectToServer() {
 				});
 		});
 
-		socket.on('receive message_sub', function(msg){
-
-				console.log(msg);
-				$('#messageWindow').append(msg+"\n");
-				$('#messageWindow').scrollTop($('#messageWindow')[0].scrollHeight);
-		});
-
 		socket.on('disconnect', function() {
 				console.log('웹소켓 연결이 종료되었습니다.');
 		});
 }
 
 
+$('#chat').on('submit', function(e){
 
-function enterkey() {
-	if (window.event.keyCode == 13) {
-		send();
-	}
-}
-function send() {
-	socket.emit('send message_sub',$('#userid').val() , inputMessage.value);
-	// textarea.value += "나 : " + inputMessage.value + "\n";
-	// webSocket.send(inputMessage.value);
-	inputMessage.value = "";
-	// document.body.scrollTop = document.body.scrollHeight;
-}
+	socket.emit('send message_sub', req.session.userId, $('#message').val());
+	$('#message').val("");
+	$("#message").focus();
+	e.preventDefault();
+});
+socket.on('receive message_sub', function(msg){
 
+		console.log(msg);
+		$('#chatLog').append(msg + ri+"\n");
+		$('#chatLog').scrollTop($('#chatLog')[0].scrollHeight);
 
 
+});
 
 
-	$('.btn-example').click(function(){
+
+
+
+	$('#hohohoho').click(function(){
+		console.log("asafdsadfsfdasfdas");
 		var $href = $(this).attr('href');
 		layer_popup($href);
 	});

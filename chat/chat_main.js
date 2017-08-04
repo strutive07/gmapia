@@ -46,6 +46,7 @@ var tmp_counter_hohohohoho=0;
 
 
 chat_main.init = function(app, server){
+  out_app = app;
   app.use(cors());
   console.log('cors 모듈 사용 완료');
   io = socketio.listen(server);
@@ -85,6 +86,11 @@ chat_main.init = function(app, server){
       console.log(msg);
       io.emit('receive message', msg, ri);
     });
+    socket.on('send message_sub', function(name,text){
+      var msg = name + ' : ' + text;
+      console.log(msg);
+      io.emit('receive message_sub', msg);
+    });
     socket.on('addUserToList', function(input){
       for(var i=0;i<userList.length;i++){
         if(userList[i].userid == input.userid){
@@ -96,6 +102,48 @@ chat_main.init = function(app, server){
     });
 
 
+    socket.on('change_icon', function(icon_id, received_user_id){
+      var database = app.get('database');
+      //icon 추가
+      database.UserModel.findById(received_user_id, function(err, results){
+        if(err){
+          console.log(err);
+          return;
+        }
+        if(results.length>0){
+          results[0].curIcon = icon_id;
+          results[0].save(function(err){
+            if(err){
+              console.log(err);
+              return;
+            }
+            io.sockets.emit('redirect', received_user_id);
+          });
+        }
+      });
+    });
+
+    socket.on('buy_icon', function(icon_id, icon_point,received_user_id){
+      var database = app.get('database');
+      //icon 추가
+      database.UserModel.findById(received_user_id, function(err, results){
+        if(err){
+          console.log(err);
+          return;
+        }
+        if(results.length>0){
+          results[0].point = Number(results[0].point) - Number(icon_point);
+          results[0].icon.push(icon_id);
+          results[0].save(function(err){
+            if(err){
+              console.log(err);
+              return;
+            }
+            io.sockets.emit('redirect', received_user_id);
+          });
+        }
+      });
+    });
 
     //
     // socket.on('startNight', function(received_room_id){

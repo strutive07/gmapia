@@ -1,0 +1,192 @@
+body {
+	background: url("http://cfile227.uf.daum.net/image/26753236530FE98605F4C3") no-repeat center bottom;
+	background-size: cover;
+	background-attachment: fixed;
+}
+/*헤더*/
+div.header{
+	background-color: rgba(238, 244, 255, 0.4);
+	display: inline-block;
+	width:100%;
+	height:180px;	
+
+}
+
+div.party{
+	float:left;
+}
+div.party img{
+	float: left;
+    width: auto; 
+    height: 90px;
+}
+
+div.userpage{
+	float:right;
+}
+div.userpage img{
+	float: right;
+    width: auto; 
+    height: 90px;
+}
+
+
+/* 매칭 버튼*/
+
+div.mchbtn{
+	padding: 30px;
+	margin: auto;
+	width: 250px;
+}
+a {
+    -webkit-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -moz-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -ms-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    -o-transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    transition: all 200ms cubic-bezier(0.390, 0.500, 0.150, 1.360);
+    display: block;
+    margin: 20px auto;
+    max-width: 250px;
+    text-decoration: none;
+    border-radius: 4px;
+    padding: 20px 30px;
+   	text-align:center;
+   	font-size: 25px;
+}
+a.button2 {
+    color: rgba(30, 22, 54, 0.6);
+    box-shadow: rgba(30, 22, 54, 0.4) 0 0px 0px 2px inset;
+
+}
+
+a.button2:hover {
+    color: rgba(255, 255, 255, 0.85);
+    box-shadow: rgba(30, 22, 54, 0.7) 0 80px 0px 2px inset;
+}
+
+div.background{
+	background-color: rgba(238, 244, 255, 0.4); 
+	margin: 0 auto;
+	overflow: auto;
+	width: 100%;
+	height: 100%;
+	display: none;
+	position: static;
+
+}
+div.dd {
+
+	width: 200px;
+	margin-top: 20%;
+	margin-bottom: 10%;
+	margin-left: auto;
+	margin-right: auto;
+	text-align:center;
+	background-size: cover;
+	display: none;
+}
+
+
+/* 채팅팝업 */
+
+.pop-layer .pop-container {
+	padding: 20px 25px;
+	display: inline-block;
+}
+
+.pop-layer p.ctxt {
+	color: #2d283a;
+	line-height: 25px;
+}
+
+.pop-layer .btn-r {
+	width: 100%;
+	margin: 10px 0 20px;
+	padding-top: 10px;
+	border-top: 1px solid #DDD;
+	text-align: right;
+}
+
+.pop-layer {
+	display: none ;
+	position: absolute;
+	bottom: 10%;
+	right: 3%;
+	width: 410px;
+	height: auto;
+	background-color: rgba(238, 244, 255, 0.4);
+	border: 1px solid rgba(30, 22, 54, 1);
+	border-radius: 30px;
+	z-index: 10;
+}
+
+.dim-layer {
+	display: none;
+	position: fixed;
+	_position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+}
+
+.dim-layer .dimBg {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: .5;
+	filter: alpha(opacity=50);
+
+}
+
+.dim-layer .pop-layer {
+	display: block;
+
+}
+
+a.btn-layerClose {
+	display: inline-block;
+	height: 25px;
+	padding: 0 14px 0;
+	border: 1px solid #304a8a;
+	background-color: #3f5a9d;
+	font-size: 13px;
+	color: #fff;
+	line-height: 25px;
+}
+
+a.btn-layerClose:hover {
+	border: 1px solid #091940;
+	background-color: #1f326a;
+	color: #fff;
+}
+a.btn-send{
+	display: inline-block;
+	height: 25px;
+	padding: 0 14px 0;
+	border: 1px solid #304a8a;
+	background-color: #3f5a9d;
+	font-size: 13px;
+	color: #fff;
+	line-height: 25px;
+}
+
+.btn{
+	bottom: 2%;
+	right: 2%;
+	position:absolute;
+}
+.btn img{
+	height: 50px;
+	width: auto;
+}
+
+.message-window{
+	width: 100%;
+	resize:none;
+	overflow: auto;
+}

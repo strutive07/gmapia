@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <title>Mafia Web_User Page</title>
+    <link rel="stylesheet" href="/css/user_page.css"/>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.3/socket.io.js"></script>
+
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <a href="/game">매칭창으로 돌아가기</a>
+            <a href="/process/logout" style="float: right" onclick="logout();">로그아웃</a>
+        </div>
+
+				<input id="userid" type="hidden"value="<%=user_info[0].id%>" readonly>
+				<input id="user_point" type="hidden"value="<%= user_info[0].point%>" readonly>
+
+        <div class="user_page" >
+            <div class="shop_icon"><img src="<%= curUserIcon.src%>"><br/>
+                <table class="table" style="font-size:10pt;">
+                    <tbody>
+                        <tr>
+                            <td>닉네임</td>
+                            <td colspan="4" ><%= user_info[0].name%></td>
+                        </tr>
+                        <tr>
+                            <td>잔여 Point</td>
+                            <td colspan="4"><%= user_info[0].point%></td>
+                        </tr>
+                        <tr>
+                            <td>전적</td>
+                            <td class="even">승</td>
+                            <td><%= user_info[0].win%></td>
+                            <td class="even">패</td>
+                            <td><%= user_info[0].lose%></td>
+                        </tr>
+                        <tr>
+                        <td></td>
+                        </tr>
+                        <tr>
+                         <td class="even" colspan="5">보유아이콘</td>
+                     </tr>
+                     <tr>
+                         <td  colspan="5">
+													 <%for(var i=0;i<icon_info.length;i++){%>
+														 <%for(var j=0;j<user_info[0].icon.length;j++){%>
+															 <%if(user_info[0].icon[j] == icon_info[i].id){%>
+																 <div class="shop_icon">
+																	 <img src="<%= icon_info[i].src%>" >
+																	 <br/><%= icon_info[i].name%><br/>
+																	 <a href="#" type="<%= icon_info[i].id%>"onclick="changeicon(this)">변경</a>
+																 </div>
+															 <%}%>
+														 <%}%>
+													 <%}%>
+                           <!-- <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"  ><br/>동해물과<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>백두산이<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"><br/>마르고<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>닳도록<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>하느님이<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>보우하사<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>우리나라만세<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>무궁화<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"><br/>삼천리<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>화려강산<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"><br/>대한사람<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>대한으로<br/><a href="#" onclick="changeicon(this)">변경</a></div>
+
+                           <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>나라사랑하세<br/><a href="#" onclick="changeicon(this)">변경</a></div> -->
+                       </td>
+                   </tr>
+               </tbody>
+           </table>
+
+
+       </div>
+   </div>
+
+
+   <div class="shop_page">
+		 <%for(var i=0;i<icon_info.length;i++){%>
+			 <%if(user_info[0].icon.indexOf(icon_info[i].id) == -1){%>
+				 <div class="shop_icon">
+  				 <img src="<%= icon_info[i].src%>">
+  				 <br/>
+  				 <%= icon_info[i].name%>
+  				 <br/>
+  				 <a href="#" type="<%= icon_info[i].id%>" name = "<%= icon_info[i].point%>"onclick="buyingicon(this)">아이콘 구입</a>
+  			 </div>
+			 <%}%>
+		 <%}%>
+    <!-- <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"  ><br/>동해물과<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>백두산이<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"><br/>마르고<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>닳도록<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>하느님이<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>보우하사<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>우리나라만세<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>무궁화<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"><br/>삼천리<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>화려강산<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg"><br/>대한사람<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>대한으로<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div>
+
+    <div class="shop_icon"><img src="https://pbs.twimg.com/profile_images/762912293508161540/vgE6Dyzf.jpg" ><br/>나라사랑하세<br/><a href="#" onclick="buyingicon(this)">아이콘 구입</a></div> -->
+</div>
+</div>
+</body>
+<script language="JavaScript">
+
+		var socket = io();
+		socket.on('redirect', function(userid){
+			if(userid == $('#userid').val()){
+				alert('새로 고침');
+				location.href = 'http://localhost:3000/user/' + $('#userid').val();
+			}
+		});
+    function buyingicon(obj){
+        alert('구입버튼클릭!');
+        //if(성공적으로 결제)
+        //Buying();
+			//ㅁㄴㅇㄹㄻㅁㄹㄴㄻㄴㅇㄹㄴㄹㄴㅁㅁㄴㄹㄴㅁㄹㄻㄴㅁㄴㄻㄹㄴㄹㄴㅁㅇㄻㄴㅇㄻㄴ
+				//산거 또 못사게 하기!
+				console.log(obj.type);
+
+				if($('#user_point').val() < obj.name){
+					alert('포인트가 부족합니다!');
+					return;
+				}else{
+					socket.emit('buy_icon', obj.type,obj.name, $('#userid').val());
+				}
+    }
+    function changeicon(obj){
+        alert('변경버튼클릭!');
+				console.log(obj.type);
+				socket.emit('change_icon', obj.type, $('#userid').val());
+    }
+    function logout(obj){
+        alert('로그아웃!');
+
+    }
+</script>
+
+
+</html>

@@ -9,7 +9,10 @@ Schema.createSchema = function(mongoose){
     salt: {type:String, required:true},
     name: {type: String, index: 'hashed', 'default':''},
     point:{type: Number},
-    win:{type: Number}
+    win:{type: Number},
+    lose:{type: Number},
+    curIcon:{type: Number},
+    icon:[Number]
   });
 
 	UserSchema.virtual('password').set(function(password){
