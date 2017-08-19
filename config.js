@@ -17,5 +17,6 @@ module.exports = {
 			,{file:path.join(process.cwd(),'login/LoginProcess'), path:'/user/:param_userid', method:'user_page', type:'get'}
 			,{file:path.join(process.cwd(),'login/LoginProcess'), path:'/temp/icon/register', method:'icon_register_html', type:'get'}
 			,{file:path.join(process.cwd(),'login/LoginProcess'), path:'/temp/icon/icon_register', method:'icon_register_process', type:'post'}
+			,{file:path.join(process.cwd(),'login/LoginProcess'), path:'/process/logout', method:'logout', type:'get'}
 	]
 };

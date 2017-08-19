@@ -2,7 +2,9 @@ body {
 	background: url("http://cfile227.uf.daum.net/image/26753236530FE98605F4C3") no-repeat center bottom;
 	background-size: cover;
 	background-attachment: fixed;
+	overflow: auto;
 }
+
 html, body{
 	height: 100%;
 }
@@ -11,9 +13,10 @@ html, body{
 	background-size: cover;
 	background-attachment: fixed;
 	display: inline-block;
-	height: 100%;
 	width: 100%;
 }
+
+
 
 .header {
 	padding: 20px;
@@ -21,24 +24,36 @@ html, body{
 	border: 1px solid #bcbcbc;
 }
 
+.chatting{
+	width: 95%;
+	margin-bottom: 20px;
+	border: 1px solid #bcbcbc;
+	display: inline-block;
+	overflow: auto;
+
+}
+
+.sidebar{
+	width: 95%;	margin-right: 1%;
+	margin-bottom: 20px;
+	border: 1px solid #bcbcbc;
+	display: inline-block;
+	overflow: auto;
+
+}
 .user_page{
-	width: 48.5%;
-	height: 88%;
+	width: 95%;
 	margin-left: 1%;
 	margin-bottom: 20px;
-	float: left;
 	border: 1px solid #bcbcbc;
-	position: absolute;
 	display: inline-block;
 	overflow: auto;
 }
 
 .shop_page{
-	width: 48.5%;
-	height: 88%;
+	width: 95%;
 	margin-right: 1%;
 	margin-bottom: 20px;
-	float: right;
 	border: 1px solid #bcbcbc;
 	position:static;
 	display: inline-block;
@@ -90,3 +105,33 @@ html, body{
 a:link { color:black; text-decoration: none;	background: rgba(30, 22, 54, 0.4);}
 a:visited { color: black; text-decoration: none;}
 a:hover { color: black; text-decoration: none;}
+
+@media (min-width: 768px) {
+	.user_page{
+		width: 48.5%;
+		height: 88%;
+		margin-left: 1%;
+		margin-bottom: 20px;
+		float: left;
+		border: 1px solid #bcbcbc;
+		position: absolute;
+		display: inline-block;
+		overflow: auto;
+	}
+
+	.shop_page{
+		width: 48.5%;
+		height: 88%;
+		margin-right: 1%;
+		margin-bottom: 20px;
+		float: right;
+		border: 1px solid #bcbcbc;
+		position:static;
+		display: inline-block;
+		overflow: auto;
+	}
+	.container{
+		height: 100%;
+		display: inline-block;
+	}
+}

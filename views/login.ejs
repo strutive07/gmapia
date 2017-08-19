@@ -11,7 +11,7 @@
 
 	<link rel="stylesheet" href="/css/login.css"/>
 
-	-</head>
+	</head>
 
 	<body>
 		<div class="container">
@@ -24,14 +24,14 @@
 					<tr>
 						<td>
 							<form id="form_id" method="post" action="/process/login" name="login">
-								<input type="text" name="id" id="username" placeholder="input your id" />
-								<input type="password" name="password" id="password" placeholder="password" />
+								<input type="text" name="id" id="username" placeholder="input your id" class="input_area"/>
+								<input type="password" name="password" id="password" placeholder="password" class="input_area"/>
 								<input type="submit" value="전송" class="button" >
 							</form>
 						</td>
-						<td>
-							<!-- <a href="matching.html" onclick="log_in()" id="submit" type="submit" class="button">LogIn</a> -->
-						</td>
+
+						<!-- <a href="matching.html" onclick="log_in()" id="submit" type="submit" class="button">LogIn</a> -->
+
 					</tr>
 
 					<tr>
@@ -51,21 +51,21 @@
 					<tr>
 						<td>
 							<form method="post" action="/process/register">
-								<input type="text" name="id" id="username" placeholder="input your id" />
+								<input type="text" name="id" id="username" placeholder="input your id" class="input_area"/>
 								<br>
-								<input type="text" name="username" id="nickname" placeholder="nickname" />
+								<input type="text" name="username" id="nickname" placeholder="nickname" class="input_area"/>
 								<br>
-								<input type="password" name="password" id="password" placeholder="password" />
+								<input type="password" name="password" id="password" placeholder="password" class="input_area"/>
 								<br>
 								<!-- <input type="password" name="cpassword" id="cpassword" placeholder="confirm password" />								 -->
-								<input type="submit" value="전송" >
+								<input type="submit" value="전송" class="button">
 							</form>
 
 						</td>
 
-						<td>
-							<!-- <a href="#" id="submit" onclick="signup()" class="button"> SignUp</a> -->
-						</td>
+
+						<!-- <a href="#" id="submit" onclick="signup()" class="button"> SignUp</a> -->
+
 					</tr>
 
 					<tr>
@@ -76,11 +76,7 @@
 						</td>
 					</tr>
 
-					<tr>
-						<td colspan="2">
-							<hr>
-						</td>
-					</tr>
+
 				</table>
 			</div>
 		</div>

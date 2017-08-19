@@ -1,96 +1,97 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="utf-8">
-    <meta charset="UTF-8">
-    <title>Mafia Web-Room</title>
-    <link rel="stylesheet" href="/css/play_room.css"/>
+<head>
+  <meta charset="utf-8">
+  <meta charset="UTF-8">
+  <title>Mafia Web-Room</title>
+  <link rel="stylesheet" href="/css/play_room.css"/>
 
-  </head>
-  <body>
-    <div class="container">
-  		<div class="header">
-  		   <p>HO! </p>
-  		</div>
-  		<div class="chatting">
-  			<fieldset style="height:80%">
-  				<textarea id="chatLog" style="resize: none; width: 100%; height: 90%"  cols="50" readonly="true"></textarea>
-  				<form id="chat">
-  					<input id="name" class="name" type="text" value="<%= nowUser%>" readonly>
-  					<input id="message" class="message" type="text">
-  					<input type="submit" class="chat" value="chat"/>
-  				</form>
-  			</fieldset>
-  			<br/><br/>
-  			<div>
-  	      <input id="alive_ok_vote" type="button" class="chat" value="살리기"/>
-  	      <input id="kill_ok_vote" type="button" class="chat" value="죽이기"/>
-  	    </div>
-  			<table class="table"><tbody><tr><td>당신은</td><td class="even">---</td><td>입니다.</td></tr></tbody></table>
-  			<div>
-            <% for(var i=1; i<= info[0].room_user_count ; i++){%>
-              <p>
-                <input id="KILLname<%=i%>" class="name" type="text"  value="<%= info[i].userid%>"readonly>
-                <input id="KILL<%=i%>" type="button" class="chat" value="죽이기"/>
-              </p>
-            <% } %>
-        </div>
-  		</div>
-  		<div class="sidebar">
-  			<div class="member">
-  				<table class="table">
-  					<tbody>
-  						<tr>
-  							<td class="even">생존자</td>
-  						</tr>
-  						<tr>
-  							<td>
-  								<li id="room_id"><%= info[0].room_id%></li>
-  					      <li><%= info[0].room_user_count%></li>
-  					      <li><%= info[1].userid%> <%= info[1].job%></li>
-  					      <li id="User_isAlive1"></li>
-  					      <li><%= info[2].userid%> <%= info[2].job%></li>
-  					      <li id="User_isAlive2"></li>
-  					      <li><%= info[3].userid%> <%= info[3].job%></li>
-  					      <li id="User_isAlive3"></li>
-  					      <li><%= info[4].userid%> <%= info[4].job%></li>
-  					      <li id="User_isAlive4"></li>
-  					      <li><%= info[5].userid%> <%= info[5].job%></li>
-  					      <li id="User_isAlive5"></li>
-  							</td>
-  						</tr>
-  					</tbody>
-  				</table>
-  			</div>
-  			<div class="member">
-  				<table class="table">
-  					<tbody>
-  						<tr>
-  							<td class="even">사망자</td>
-  						</tr>
-  						<tr>
-  							<td>
-  								<li>dfadsfa</li>
-  								<li>dafefaewef</li>
-  							</td>
-  						</tr>
-  					</tbody>
-  				</table>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+     <p><img src="/img/alclsalclsalcls.png" style="width: 25px">   HO! </p>
+   </div>
+   <div class="chatting">
+    <div class="text_">
+     <fieldset style="height:80%">
+      <textarea id="chatLog" style="resize: none; width: 100%; height: 90%"  cols="50" readonly="true"></textarea>
+      <form id="chat">
+       <input id="name" class="name" type="text" value="<%= nowUser%>" readonly>
+       <input id="message" class="message" type="text">
+       <input type="submit" class="chat" value="chat" class="btn-send"/>
+     </form>
+   </fieldset>
+ </div>
+ <div>
+   <input id="alive_ok_vote" type="button" class="chat" value="살리기"/>
+   <input id="kill_ok_vote" type="button" class="chat" value="죽이기"/>
+ </div>
+ <table class="table"><tbody><tr><td>당신은</td><td class="even">---</td><td>입니다.</td></tr></tbody></table>
+ <div>
+  <% for(var i=1; i<= info[0].room_user_count ; i++){%>
+  <p>
+    <input id="KILLname<%=i%>" class="name" type="text"  value="<%= info[i].userid%>"readonly>
+    <input id="KILL<%=i%>" type="button" class="chat" value="죽이기"/>
+  </p>
+  <% } %>
+</div>
+</div>
+<div class="sidebar">
+ <div class="member">
+  <table class="table">
+   <tbody>
+    <tr>
+     <td class="even">생존자</td>
+   </tr>
+   <tr>
+     <td>
+      <li id="room_id"><%= info[0].room_id%></li>
+      <li><%= info[0].room_user_count%></li>
+      <li><%= info[1].userid%> <%= info[1].job%></li>
+      <li id="User_isAlive1"></li>
+      <li><%= info[2].userid%> <%= info[2].job%></li>
+      <li id="User_isAlive2"></li>
+      <li><%= info[3].userid%> <%= info[3].job%></li>
+      <li id="User_isAlive3"></li>
+      <li><%= info[4].userid%> <%= info[4].job%></li>
+      <li id="User_isAlive4"></li>
+      <li><%= info[5].userid%> <%= info[5].job%></li>
+      <li id="User_isAlive5"></li>
+    </td>
+  </tr>
+</tbody>
+</table>
+</div>
+<div class="member">
+  <table class="table">
+   <tbody>
+    <tr>
+     <td class="even">사망자</td>
+   </tr>
+   <tr>
+     <td>
+      <li>dfadsfa</li>
+      <li>dafefaewef</li>
+    </td>
+  </tr>
+</tbody>
+</table>
 
-  			</div>
-  			<div>
-        	<form method="post" action="/process/ch_point">
-        	  <input id="v_point_id"type="hidden" name="v_point" value="0">
-        		<input id="endGame_submit" type="submit" value="전송" >
-        	</form>
-        </div>
-  			<!-- <a href="matching.html" class="button2" style=" padding: 20px 100px;">Quit</a> -->
-  		</div>
-  	</div>
-    <script src="/socket.io/socket.io.js"></script>
-    <script src="//code.jquery.com/jquery-1.11.1.js"></script>
-    <script>
-      var socket = io();
+</div>
+<div>
+ <form method="post" action="/process/ch_point">
+   <input id="v_point_id"type="hidden" name="v_point" value="0">
+   <input id="endGame_submit" type="submit" value="전송" class="button" style=" padding: 20px 100px;">
+ </form>
+</div>
+<!-- <a href="matching.html" class="button2" style=" padding: 20px 100px;">Quit</a> -->
+</div>
+</div>
+<script src="/socket.io/socket.io.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.js"></script>
+<script>
+  var socket = io();
       // var time;
       var j_received_roomInfo = [];
       var ho;
@@ -236,7 +237,7 @@
                   // $('#KILL1').val("마피아_죽이기");
                   // $('#KILL2').val("마피아_죽이기");
                   break;
-                case 02:
+                  case 02:
                   //의사
                   for(var i=1; i<=5; i++){
                     var __id = '#KILL' + i;
@@ -251,7 +252,7 @@
                   // $('#KILL1').val("의사_살리기");
                   // $('#KILL2').val("의사_살리기");
                   break;
-                case 03:
+                  case 03:
                   //경찰
                   for(var i=1; i<=5; i++){
                     var __id = '#KILL' + i;
@@ -265,7 +266,7 @@
                   // $('#KILL1').val("경찰_채크하기");
                   // $('#KILL2').val("경찰_채크하기");
                   break;
-                case 04:
+                  case 04:
                   //시민
                   for(var k=1;k<=5;k++){
                     $('#KILL'+k).hide();
@@ -273,7 +274,7 @@
                   // $('#KILL1').hide();
                   // $('#KILL2').hide();
                   break;
-                case 11:
+                  case 11:
                   //조폭
                   for(var k=1;k<=5;k++){
                     $('#KILL'+k).hide();
@@ -281,7 +282,7 @@
                   // $('#KILL1').hide();
                   // $('#KILL2').hide();
                   break;
-                case 12:
+                  case 12:
                   //스파이
                   //채크 성공시 job code 01 로 변경
                   for(var k=1;k<=5;k++){
@@ -290,7 +291,7 @@
                   // $('#KILL1').val("스파이_채크하기");
                   // $('#KILL2').val("스파이_채크하기");
                   break;
-                case 13:
+                  case 13:
                   //기자
                   for(var k=1;k<=5;k++){
                     $('#KILL'+k).val("기자_선택하기");
@@ -298,7 +299,7 @@
                   // $('#KILL1').val("기자_선택하기");
                   // $('#KILL2').val("기자_선택하기");
                   break;
-                case 14:
+                  case 14:
                   //무당
                   for(var k=1;k<=5;k++){
                     $('#KILL'+k).val("무당_선택하기");
@@ -306,7 +307,7 @@
                   // $('#KILL1').val("무당_선택하기");
                   // $('#KILL2').val("무당_선택하기");
                   break;
-                case 15:
+                  case 15:
                   //군인
                   for(var k=1;k<=5;k++){
                     $('#KILL'+k).hide();
@@ -314,15 +315,15 @@
                   // $('#KILL1').hide();
                   // $('#KILL2').hide();
                   break;
-                case 16:
+                  case 16:
                   //정치가
                   //어려워...
                   break;
-                case 17:
+                  case 17:
                   //테러리스트
                   //어려워...
                   break;
-                default:
+                  default:
                   //error or 00 undefined
                   for(var k=1;k<=5;k++){
                     $('#KILL'+k).hide();
@@ -330,91 +331,91 @@
                   // $('#KILL1').attr('disable', false);
                   // $('#KILL2').attr('disable', false);
                   break;
+                }
               }
             }
           }
-        }
-      });
+        });
 
-      socket.on('endDay', function(received_max_vote_user,received_room_id){
+socket.on('endDay', function(received_max_vote_user,received_room_id){
 
-        if(j_received_roomInfo[received_max_vote_user].userid == $('#name').val()){
+  if(j_received_roomInfo[received_max_vote_user].userid == $('#name').val()){
+    $('#alive_ok_vote').hide();
+    $('#kill_ok_vote').hide();
+  }else {
+    for(var i=1;i<=5;i++){
+      if(j_received_roomInfo[i].userid==$('#name').val()){
+        if(j_received_roomInfo[i].isAlive == 'yes'){
+          $('#alive_ok_vote').show();
+          $('#kill_ok_vote').show();
+        }else{
           $('#alive_ok_vote').hide();
           $('#kill_ok_vote').hide();
-        }else {
-          for(var i=1;i<=5;i++){
-            if(j_received_roomInfo[i].userid==$('#name').val()){
-              if(j_received_roomInfo[i].isAlive == 'yes'){
-                $('#alive_ok_vote').show();
-                $('#kill_ok_vote').show();
-              }else{
-                $('#alive_ok_vote').hide();
-                $('#kill_ok_vote').hide();
-              }
-            }
-          }
-
         }
-        for(var k=1;k<=5;k++){
-          $('#KILL'+k).hide();
-        }
-        max_vote_user = received_max_vote_user;
-      });
-
-      $('#alive_ok_vote').click(function(){
-        console.log('살리기 눌름');
-        $('#alive_ok_vote').hide();
-        $('#kill_ok_vote').hide();
-        socket.emit('alive_ok_vote',max_vote_user,$('#room_id').text());
-      });
-      $('#kill_ok_vote').click(function(){
-        console.log('죽이기 눌름');
-        $('#alive_ok_vote').hide();
-        $('#kill_ok_vote').hide();
-        socket.emit('kill_ok_vote',max_vote_user,$('#room_id').text());
-      });
-
-
-
-      $('#KILL1').click(function(e){
-        console.log('눌림 : 1번 버튼');
-        buttonCLicked(1);
-      });
-      $('#KILL2').click(function(e){
-        console.log('눌림 : 2번 버튼');
-        buttonCLicked(2);
-      });
-      $('#KILL3').click(function(e){
-        console.log('눌림 : 3번 버튼');
-        buttonCLicked(3);
-      });
-      $('#KILL4').click(function(e){
-        console.log('눌림 : 4번 버튼');
-        buttonCLicked(4);
-      });
-      $('#KILL5').click(function(e){
-        console.log('눌림 : 5번 버튼');
-        buttonCLicked(5);
-      });
-      function buttonCLicked(x){
-          console.log('누우우울림', x);
-          var value = $('#KILL'+x).val();
-          console.log(value);
-          if(value == '마피아_죽이기'){
-            console.log(x);
-            socket.emit('mapia_action',x,j_received_roomInfo[0].room_id);
-          }else if(value == '의사_살리기'){
-            socket.emit('doctor_action',x,j_received_roomInfo[0].room_id);
-          }else if(value == '경찰_채크하기'){
-            socket.emit('police_action',x, $('#name').val(),j_received_roomInfo[0].room_id);
-          }else if(value == '투표하기'){
-            for(var k=1;k<=5;k++){
-              $('#KILL'+k).hide();
-            }
-            socket.emit('day_vote_action',x,j_received_roomInfo[0].room_id);
-          }
-          e.preventDefault();
       }
+    }
+
+  }
+  for(var k=1;k<=5;k++){
+    $('#KILL'+k).hide();
+  }
+  max_vote_user = received_max_vote_user;
+});
+
+$('#alive_ok_vote').click(function(){
+  console.log('살리기 눌름');
+  $('#alive_ok_vote').hide();
+  $('#kill_ok_vote').hide();
+  socket.emit('alive_ok_vote',max_vote_user,$('#room_id').text());
+});
+$('#kill_ok_vote').click(function(){
+  console.log('죽이기 눌름');
+  $('#alive_ok_vote').hide();
+  $('#kill_ok_vote').hide();
+  socket.emit('kill_ok_vote',max_vote_user,$('#room_id').text());
+});
+
+
+
+$('#KILL1').click(function(e){
+  console.log('눌림 : 1번 버튼');
+  buttonCLicked(1);
+});
+$('#KILL2').click(function(e){
+  console.log('눌림 : 2번 버튼');
+  buttonCLicked(2);
+});
+$('#KILL3').click(function(e){
+  console.log('눌림 : 3번 버튼');
+  buttonCLicked(3);
+});
+$('#KILL4').click(function(e){
+  console.log('눌림 : 4번 버튼');
+  buttonCLicked(4);
+});
+$('#KILL5').click(function(e){
+  console.log('눌림 : 5번 버튼');
+  buttonCLicked(5);
+});
+function buttonCLicked(x){
+  console.log('누우우울림', x);
+  var value = $('#KILL'+x).val();
+  console.log(value);
+  if(value == '마피아_죽이기'){
+    console.log(x);
+    socket.emit('mapia_action',x,j_received_roomInfo[0].room_id);
+  }else if(value == '의사_살리기'){
+    socket.emit('doctor_action',x,j_received_roomInfo[0].room_id);
+  }else if(value == '경찰_채크하기'){
+    socket.emit('police_action',x, $('#name').val(),j_received_roomInfo[0].room_id);
+  }else if(value == '투표하기'){
+    for(var k=1;k<=5;k++){
+      $('#KILL'+k).hide();
+    }
+    socket.emit('day_vote_action',x,j_received_roomInfo[0].room_id);
+  }
+  e.preventDefault();
+}
         //
         // $('#KILL'+x).click(function(e){
         //   console.log('누우우울림', x);
@@ -510,7 +511,7 @@
 
 
       function startDay(){
-          socket.emit('startDay',$('#room_id').text(),$('#name').val());
+        socket.emit('startDay',$('#room_id').text(),$('#name').val());
       }
 
       function Day(){
@@ -532,4 +533,4 @@
       }
     </script>
   </body>
-</html>
+  </html>

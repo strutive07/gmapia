@@ -11,8 +11,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <a href="/game">매칭창으로 돌아가기</a>
-            <a href="/process/logout" style="float: right" onclick="logout();">로그아웃</a>
+            <a href="/game"><img src="/img/alclsalclsalcls2.png" style="width: 25px">매칭창으로 돌아가기</a>
+            <a href="/process/logout" style="float: right" onclick="logout();">로그아웃<img src="/img/alclsalclsalcls.png" style="width: 25px"></a>
         </div>
 
 				<input id="userid" type="hidden"value="<%=user_info[0].id%>" readonly>
@@ -97,8 +97,10 @@
 				 <div class="shop_icon">
   				 <img src="<%= icon_info[i].src%>">
   				 <br/>
-  				 <%= icon_info[i].name%>
+  				 아이콘 : <strong><%= icon_info[i].name%></strong>
   				 <br/>
+					 필요 포인트 : <strong><%= icon_info[i].point%></strong>
+					 <br/>
   				 <a href="#" type="<%= icon_info[i].id%>" name = "<%= icon_info[i].point%>"onclick="buyingicon(this)">아이콘 구입</a>
   			 </div>
 			 <%}%>

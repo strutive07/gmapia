@@ -103,6 +103,15 @@ var login = function(req,res){
   }
 };
 
+var logout = function(req, res){
+  req.session.userId = null;
+  req.session.userName = null;
+  req.session.user_point = null;
+  req.session.user_win = null;
+  console.log('logout : ', req.session);
+
+  res.redirect('/login');
+};
 
 
 var register = function(req, res){
@@ -286,3 +295,4 @@ module.exports.change_point = change_point;
 module.exports.user_page = user_page;
 module.exports.icon_register_html = icon_register_html;
 module.exports.icon_register_process = icon_register_process;
+module.exports.logout = logout;
